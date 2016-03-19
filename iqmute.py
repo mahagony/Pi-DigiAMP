@@ -30,15 +30,19 @@ class IQaudIO:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="mute/unmute IQAudIO Pi-DigiAMP+")
-    parser.add_argument("--mute", action="store_true", help="unmute by default")
+    parser.add_argument("--mute", action="store_true", help="mute Pi-DigiAMP")
+    parser.add_argument("--unmute", action="store_true", help="unmute Pi-DigiAMP")
     parser.add_argument("--show", action="store_true", help="show status")
     args = parser.parse_args()
     if args.show:
         IQaudIO().show()
         exit()
+    if args.unmute:
+        IQaudIO().unmute()
+        exit()
     if args.mute:
         IQaudIO().mute()
         exit()
     else:
-        IQaudIO().unmute()
+        IQaudIO().show()
         exit()
