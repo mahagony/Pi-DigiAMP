@@ -1,17 +1,16 @@
 #!/usr/bin/env python3
 import sys, os
 import argparse
-import RPi.GPIO as GPIO
+import pigpio
 
 class IQaudIO:
     def __init__(self):
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setwarnings(False)
         self.port = 22
-        GPIO.setup(self.port, GPIO.OUT)
+        self.pi = pigpio.pi()
+        self.pi.set_mode(self.port, pigpio.OUTPUT)
 
     def output(self, value):
-        GPIO.output(self.port, value)
+        self.pi.write(self.port, value)
 
     def mute(self):
         self.output(0)
@@ -20,13 +19,10 @@ class IQaudIO:
         self.output(1)
 
     def show(self):
-        if GPIO.input(self.port):
+        if self.pi.read(self.port):
             print("Pi-DigiAMP+ is in UNMUTE state")
         else:
             print("PI-DigiAMP+ is in MUTE state")
-
-    def __del__(self):
-        GPIO.cleanup()
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="mute/unmute IQAudIO Pi-DigiAMP+")
